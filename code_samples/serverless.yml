@@ -1,0 +1,38 @@
+
+service: pycon
+
+custom:
+  s3BucketName: ${ssm:/pycon/random-bucket}
+
+provider:
+  name: aws
+  region: ap-southeast-1
+  runtime: python3.7
+  versionFunctions: false
+  logRetentionInDays: 1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+      Resource: arn:aws:s3:::${self:custom.s3BucketName}/*
+  environment:
+    DEST_BUCKET: ${self:custom.s3BucketName}
+    SOURCE_BUCKET: ${self:custom.s3BucketName}
+
+functions:
+  copy:
+    handler: main.main
+    description: copy object from one S3 Bucket to another
+    memorySize: 256
+    timeout: 45
+  copy_big:
+    handler: main.main
+    description: copy object from one S3 Bucket to another (larger memory)
+    memorySize: 1280
+    timeout: 45
+
+package:
+ exclude:
+   - venv/**
+   - terraform/**
