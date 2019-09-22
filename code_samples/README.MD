@@ -11,8 +11,8 @@ After that, you can deploy the serverless functions using `sls deploy`
 
 # Pre-requisites
 
-* Terraform
-* Serverless Framework
+* [Terraform](https://terraform.io/)
+* [Serverless Framework](https://serverless.com/)
 
 # Other notes
 
