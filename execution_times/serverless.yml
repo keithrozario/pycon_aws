@@ -22,15 +22,30 @@ provider:
 
 functions:
   copy:
-    handler: main.main
+    handler: memory_vs_disk.main
     description: copy object from one S3 Bucket to another
     memorySize: 256
     timeout: 45
   copy_big:
-    handler: main.main
+    handler: memory_vs_disk.main
     description: copy object from one S3 Bucket to another (larger memory)
-    memorySize: 1280
+    memorySize: 2048
     timeout: 45
+  lazy_load:
+    handler: lazy_load.main
+    description: Testing the effects of lazy loading in Lambda functions
+    memorySize: 256
+    timeout: 120
+  download_config_in_handler:
+    handler: download_config_in_handler.main
+    description: Download a configuration from a json file in S3
+    memorySize: 256
+    timeout: 5
+  download_config_outside_handler:
+    handler: download_config_outside_handler.main
+    description: Download a configuration from a json file in S3 (outside handler)
+    memorySize: 256
+    timeout: 5
 
 package:
  exclude:

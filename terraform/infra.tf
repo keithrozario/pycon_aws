@@ -1,5 +1,3 @@
-
-
 # Provider Block
 provider "aws" {
   version    = "~> 2.7"
@@ -58,6 +56,12 @@ resource "aws_s3_bucket_object" "shodan_results" {
   bucket = "${aws_s3_bucket.pycon_random_bucket.bucket}"
   key    = "shodan-export.json.gz"
   source = "files/shodan-export.json.gz"
+}
+
+resource "aws_s3_bucket_object" "config" {
+  bucket = "${aws_s3_bucket.pycon_random_bucket.bucket}"
+  key    = "config.json"
+  source = "files/config.json"
 }
 
 

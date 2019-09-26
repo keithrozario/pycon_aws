@@ -1,3 +1,9 @@
+
+"""
+This script uses S3 Select to read from a file in S3.
+S3 Select allows you to read the partial contents of a file, and allow AWS S3 to do the selection for you...
+"""
+
 import boto3
 import json
 

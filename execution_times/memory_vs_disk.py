@@ -106,7 +106,10 @@ def in_memory_copy(source_bucket, dest_bucket, key):
 
 if __name__ == '__main__':
 
-    bucket_name = 'terraform-20190921073940359200000001'
+    # Get Randomly Generated bucket name from Terraform deploy
+    ssm_client = boto3.client('ssm')
+    bucket_name = ssm_client.get_parameter(Name='/pycon/random-bucket')['Parameter']['Value']
+
     source_bucket = s3.Bucket(bucket_name)
     dest_bucket = s3.Bucket(bucket_name)
 
