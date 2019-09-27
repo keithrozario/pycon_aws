@@ -4,7 +4,7 @@ Use the slide from serverless meetup...
 
 # Quick API demo - 5 minutes
 
-[bare_minimum](bare_minimum)
+[bare_minimum](code_samples/01. bare_minimum)
 
 Let the platform do the work...
 
@@ -65,5 +65,6 @@ Example of a layer straight from code
 ### SSM variables between Terraform and Serverless
 ### Environment Variables in Serverless
 ### Amazon xray for customization
+### Step Functions
  
 # End

@@ -1,0 +1,29 @@
+service: pycon-bare-minimum
+
+provider:
+ name: aws
+ region: ap-southeast-1
+ runtime: python3.7
+
+functions:
+  hello:
+    handler: hello.main
+    memorySize: 128
+    timeout: 30
+    concurrency: 10
+    events:
+      - http:
+          path: /api/v1/hello
+          method: GET
+  goodbye:
+    handler: goodbye.main
+    memorySize: 256
+    timeout: 10
+    concurrency: 5
+    events:
+      - http:
+          path: /api/v1/goodbye
+          method: GET
+      - http:
+          path: /api/v1/goodbye
+          method: POST

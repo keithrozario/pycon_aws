@@ -1,0 +1,28 @@
+service: pycon-very-large
+
+provider:
+ name: aws
+ region: ap-southeast-1
+ runtime: python3.7
+
+package:
+ individually: true
+
+functions:
+ small:
+  handler: main.hello
+  description: Lambda Function without the 49MB file
+  memorySize: 128
+  timeout: 30
+  package:
+   exclude:
+    - 49MBFile  # a 100MB file in this folder
+
+ large:
+  handler: main.hello
+  description: Lambda Function without the 49MB zip file
+  memorySize: 128
+  timeout: 30
+  package:
+   include:
+    - 49MBFile
