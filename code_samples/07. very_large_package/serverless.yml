@@ -16,7 +16,7 @@ functions:
   timeout: 30
   package:
    exclude:
-    - 49MBFile  # a 100MB file in this folder
+    - 49MBFile  # a 49MB file in this folder
 
  large:
   handler: main.hello

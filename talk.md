@@ -9,9 +9,25 @@ Use the slide from serverless meetup...
 Let the platform do the work...
 
 ### End Code
-∂
+
     $ sls deploy
     $ sls invoke -f hello
+
+# Lambda Lifecycle - 5 minutes
+
+Lambda has an odd lifecycle, that usually involves complicated jargon like execution context etc etc.
+
+Slide with butterfly, egg and execution
+
+# To reduce execution time - 2 minute
+
+Move all non-event based code outside the handler ... 
+
+# To reduce Load time... -  2 minute
+
+Reduce size of the package...
+
+# To reduce bootstrap time
 
 # Using memory - 3 minutes
 
@@ -32,22 +48,6 @@ Don't miss a trick though -- if you're intending to process JSON or CSV files, u
 S3 select has a limit on file sizes, and record sizes in S3 though .. so be careful.
 
 For more complex queries, especially across multiple files -- AWS Athena is awesome. But be careful, it's not available in all AWS Regions.
-
-# Lambda Lifecycle - 5 minutes
-
-Lambda has an odd lifecycle, that usually involves complicated jargon like execution context etc etc.
-
-Slide with butterfly, egg and execution
-
-# To reduce execution time - 2 minute
-
-Move all non-event based code outside the handler ... 
-
-# To reduce Load time... -  2 minute
-
-Reduce size of the package...
-
-Using Layers...
 
 # Using Layers in your Lambda Functions - 5 minutes
 

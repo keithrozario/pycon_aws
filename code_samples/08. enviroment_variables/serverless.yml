@@ -1,0 +1,24 @@
+service: pycon-env-vars
+
+provider:
+  name: aws
+  region: ap-southeast-1
+  runtime: python3.7
+  environment:
+    ENV_VAR: ${ssm:/pycon/random-var}
+
+functions:
+  hello:
+    handler: hello.main
+    memorySize: 128
+    timeout: 30
+    concurrency: 10
+    environment:
+      ENV_VAR_2: "another random var"
+  hello_no_var:
+    handler: hello.main
+    memorySize: 128
+    timeout: 30
+    concurrency: 10
+
+# hello_no_var won't fail, because we have a .get

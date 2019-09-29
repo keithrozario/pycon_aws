@@ -22,6 +22,13 @@ resource "aws_ssm_parameter" "s3bucket_keys" {
   overwrite = true
 }
 
+resource "aws_ssm_parameter" "random_env_var" {
+  type  = "String"
+  name  = "/pycon/random-var"
+  value = "random_variable"
+  overwrite = true
+}
+
 resource "aws_s3_bucket_object" "object_10MB" {
   bucket = "${aws_s3_bucket.pycon_random_bucket.bucket}"
   key    = "10.txt"

@@ -15,6 +15,7 @@ functions:
       - http:
           path: /api/v1/hello
           method: GET
+
   goodbye:
     handler: goodbye.main
     memorySize: 256
@@ -26,7 +27,4 @@ functions:
           method: GET
       - http:
           path: /api/v1/goodbye
-          method: POST
-      - http:
-          path: /api/v1/hello
           method: POST
