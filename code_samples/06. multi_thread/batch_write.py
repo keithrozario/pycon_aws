@@ -34,9 +34,9 @@ def gen_items(num_items):
     results = []
 
     for i in range(num_items):
-        results.append({'pk': {'S': pk},
-                        'rk': {'N': str(i)},
-                        'expires_in': {'N': str(ttl_value)}})
+        results.append({'pk': pk,
+                        'rk': i,
+                        'expires_in': ttl_value})
     return results
 
 
@@ -46,15 +46,14 @@ def write_items(items):
     Receives a list of text to be processed, one element per row
     Returns a list of dictionaries to be combined into a single file
     """
-    dynamodb_client = boto3.client('dynamodb')
-    responses = []
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table(table_name)
 
-    for item in items:
-        response = dynamodb_client.put_item(TableName=table_name,
-                                            Item=item)
-        responses.append(response)
+    with table.batch_writer() as batch:
+        for item in items:
+            batch.put_item(Item=item)
 
-    return responses
+    return None
 
 
 if __name__ == '__main__':

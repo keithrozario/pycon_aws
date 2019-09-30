@@ -1,22 +1,46 @@
 import math
 import logging
 from multiprocessing import Process, Pipe
-from random import randint
 from datetime import datetime
 import boto3
+import time
 
 logger = logging.getLogger()
 level = logging.INFO
 
+ssm_client = boto3.client('ssm')
+table_name = ssm_client.get_parameter(Name='/pycon/dynamodb_table_name')['Parameter']['Value']
+
+
+def main(event, context):
+
+    num_items = event.get('num_items', 100)
+    num_procs = event.get('num_proc', 2)
+
+    result = start(num_items, num_procs)
+
+    return result
+
+
+def start(num_items, num_procs):
+
+    items = gen_items(num_items)
+    response = multiproc_requests(items, num_procs, write_items)
+
+    return response
+
+
 def gen_items(num_items):
 
     pk = datetime.now().isoformat()
-    rk = randint(1, 100000000)
+    ttl_value = int(time.time() + 8*3600)
 
     results = []
+
     for i in range(num_items):
         results.append({'pk': {'S': pk},
-                        'rk': {'N': str(rk)}})
+                        'rk': {'N': str(i)},
+                        'expires_in': {'N': str(ttl_value)}})
     return results
 
 
@@ -26,12 +50,13 @@ def write_items(items, conn):
     Receives a list of text to be processed, one element per row
     Returns a list of dictionaries to be combined into a single file
     """
-    dynamo_client = boto3.client('dynamodb')
+    dynamodb_client = boto3.client('dynamodb')
     responses = []
 
     for item in items:
-
-        responses.append(item)
+        response = dynamodb_client.put_item(TableName=table_name,
+                                            Item=item)
+        responses.append(response)
 
     conn.send(responses)
     conn.close()
@@ -82,5 +107,5 @@ if __name__ == '__main__':
     items = gen_items(100)
     results = multiproc_requests(items, 2, write_items)
 
-   
+
 

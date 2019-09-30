@@ -4,7 +4,6 @@ resource "aws_dynamodb_table" "dynamodb_table" {
   name = "pycon_dynamodb"
   billing_mode = "PAY_PER_REQUEST"
   hash_key = "pk"
-  # use . as separator e.g. us-east-1.requests
   range_key = "rk"
 
   attribute {
@@ -14,7 +13,7 @@ resource "aws_dynamodb_table" "dynamodb_table" {
 
   attribute {
     name = "rk"
-    type = "S"
+    type = "N"
   }
 
   ttl {
