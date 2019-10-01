@@ -30,6 +30,6 @@ terraform/.terraform
 venv/
 
 # node
-*/node_modules/*
+/node_modules
 */node_modules
 */.serverless/
