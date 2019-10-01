@@ -28,3 +28,8 @@ terraform/files/*
 terraform/terraform.tfstate*
 terraform/.terraform
 venv/
+
+# node
+*/node_modules/*
+*/node_modules
+*/.serverless/
