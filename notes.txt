@@ -1,0 +1,69 @@
+# Introduction -- we're here to talk about python and Lambdas....
+
+# Lambda is like Ronaldo...there's two them.
+	+ There's Christiano Ronaldo
+	+ Ronaldo Ronaldo
+	+ They're both cool, but they're not the same
+
+# In 2017, I build a website, that got ~2000 concurrent users. 500,000 API requests.
+	+ First of all crazy I could build it
+	+ Bill -- it was $5.00
+
+# Javascript might be the first-born son of the Serverless function, but python3.7
+
+# This talk is structured into 4 sections
+
+## Lambda Initiate
+## Lambda Padawan
+## Lambda Knights
+## Lambda Masters
+## Beyond Lambda 
+
+# Caveat -- re:invent is coming
+
+# Tools...
+
+# Demo....
+
+	$ mkdir 
+	$ sls create --template aws-python3
+
+	modify
+
+	sls deploy
+
+# Conclusion #1
+# Let the platform do the work
+
+# Lambda Padawan
+## Understanding the lifecycle of the lambda
+### Bootstrap vs. Execution
+### Lazy loading vs. Large files
+### Let the platform do the work
+
+# Lambda Knight
+## In Memory vs. Disk
+## Multi Processor
+### batch functions up
+### Let the platform do the work -- SQS
+
+# Lambda Master
+## External packages without layers
+## External packages with layers
+## External binary/libaries as well
+### a note about boto3 / a note about openssl
+
+# Beyond Lambda
+## Step Functions
+
+# Things we didn't cover
+## Lambda @Edge
+## Lambda as compute of DynamoDB
+## Lambda custom runtimes
+## API Gateway directly into DynamoDB
+
+# Final note about Python2.7 EOL in Lambda
+
+# Finale
+
+

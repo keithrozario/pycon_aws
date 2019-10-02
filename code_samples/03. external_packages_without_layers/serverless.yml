@@ -10,15 +10,10 @@ provider:
 functions:
   hello:
     handler: handler.hello
-    layers:
-      - {Ref: PythonRequirementsLambdaLayer}
 
 plugins:
   - serverless-python-requirements
-
 custom:
   pythonRequirements:
     dockerizePip: true
-    slim: true
-    layer: true
-    
+    slim: true  # makes a smaller package ~400KB vs. 800KB for request
