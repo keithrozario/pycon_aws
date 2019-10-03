@@ -8,7 +8,10 @@ provider:
 functions:
   hello:
     handler: hello.main
-g
+    memorySize: 128
+    timeout: 10
+    concurrency: 10
+    
   goodbye:
     handler: goodbye.main
     memorySize: 256

@@ -66,4 +66,4 @@
 
 # Finale
 
-
+https://www.jeremydaly.com/15-key-takeaways-from-the-serverless-talk-at-aws-startup-day/
