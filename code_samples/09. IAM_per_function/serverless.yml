@@ -1,0 +1,44 @@
+
+service: pycon
+
+custom:
+  s3BucketName: ${ssm:/pycon/random-bucket}
+
+plugins:
+  - serverless-iam-roles-per-function
+
+provider:
+  name: aws
+  region: ap-southeast-1
+  runtime: python3.7
+  versionFunctions: false
+  logRetentionInDays: 1
+  environment:
+    DEST_BUCKET: ${self:custom.s3BucketName}
+    SOURCE_BUCKET: ${self:custom.s3BucketName}
+
+functions:
+  
+  download_config_insufficient_priviledges:
+    handler: download_config_in_handler.main
+    description: Download a configuration from a json file in S3
+    memorySize: 256
+    timeout: 10
+    
+  download_config:
+    handler: download_config_in_handler.main
+    description: Download a configuration from a json file in S3
+    memorySize: 256
+    timeout: 10
+    iamRoleStatements:
+    -   Effect: Allow  # a smooth operator operating correctly
+        Action:
+        - s3:GetObject
+        Resource: arn:aws:s3:::${self:custom.s3BucketName}/config.json
+
+package:
+ exclude:
+   - venv/**
+   - terraform/**
+   - node_modules/**
+   - README.MD

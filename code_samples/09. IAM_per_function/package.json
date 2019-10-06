@@ -1,0 +1,14 @@
+{
+  "name": "iamfunction",
+  "version": "1.0.0",
+  "description": "In order to use any of these code samples, you first have to execute the Terraform scripts, in the terraform directory.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serverless-iam-roles-per-function": "^2.0.2"
+  }
+}
