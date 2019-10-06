@@ -1,3 +1,5 @@
+org: keithrozario
+app: pyconbareminimum
 service: pycon-bare-minimum
 
 provider:
@@ -6,11 +8,16 @@ provider:
  runtime: python3.7
 
 functions:
+  
   hello:
     handler: hello.main
     memorySize: 128
     timeout: 10
     concurrency: 10
+    events:
+      - http:
+          path: /api/v1/hello
+          method: GET
     
   goodbye:
     handler: goodbye.main

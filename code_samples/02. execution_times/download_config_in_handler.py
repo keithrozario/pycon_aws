@@ -3,6 +3,7 @@ import json
 import tempfile
 
 import boto3
+from aws_xray_sdk.core import xray_recorder
 
 
 def main(event, context):

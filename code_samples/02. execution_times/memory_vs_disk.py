@@ -1,9 +1,11 @@
-import boto3
 import os
 import tempfile
 import time
 import json
 import logging
+
+import boto3
+from aws_xray_sdk.core import xray_recorder
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -19,7 +21,6 @@ def main(event, context):
     dest_bucket = s3.Bucket(os.environ['DEST_BUCKET'])
 
     using = event.get('using', 'memory')
-
     response = copy(key=key,
                     iter=iter,
                     source_bucket=source_bucket,
@@ -60,6 +61,7 @@ def copy(key, iter, source_bucket, dest_bucket, using):
                        'elapsed_time': (end-start)})
 
 
+@xray_recorder.capture('disk_copy')
 def on_disk_copy(source_bucket, dest_bucket, key):
 
     """
@@ -77,6 +79,7 @@ def on_disk_copy(source_bucket, dest_bucket, key):
     return None
 
 
+@xray_recorder.capture('memory_copy')
 def in_memory_copy(source_bucket, dest_bucket, key):
 
     """
