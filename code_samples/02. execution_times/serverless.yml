@@ -25,6 +25,7 @@ provider:
     lambda: true
 
 functions:
+  
   copy:
     handler: memory_vs_disk.main
     description: copy object from one S3 Bucket to another
@@ -32,6 +33,7 @@ functions:
     timeout: 45
     layers:
       - arn:aws:lambda:ap-southeast-1:113088814899:layer:Klayers-python37-aws-xray-sdk:7
+
   copy_big:
     handler: memory_vs_disk.main
     description: copy object from one S3 Bucket to another (larger memory)

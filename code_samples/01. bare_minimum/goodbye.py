@@ -3,7 +3,7 @@ import json
 
 def main(event, context):
     body = {
-        "message": "Woooaaaahhhh Sweet child of mine"
+        "message": "Goodbye from Pycon"
     }
 
     response = {

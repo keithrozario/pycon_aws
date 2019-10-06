@@ -34,7 +34,7 @@
 
 # Conclusion #1
 # Let the platform do the work
-
+ß
 # Lambda Padawan
 ## Understanding the lifecycle of the lambda
 ### Bootstrap vs. Execution

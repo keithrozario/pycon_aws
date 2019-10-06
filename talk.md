@@ -23,11 +23,9 @@ Slide with butterfly, egg and execution
 
 Move all non-event based code outside the handler ... 
 
-# To reduce Load time... -  2 minute
+# To reduce Load time... -  1 minute
 
 Reduce size of the package...
-
-# To reduce bootstrap time
 
 # Using memory - 3 minutes
 
