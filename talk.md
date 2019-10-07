@@ -1,8 +1,8 @@
-# Intro to Serverless - 5minutes
+# Intro to Serverless - 5 minutes
 
 Use the slide from serverless meetup...
 
-# Quick API demo - 5 minutes
+# Quick API demo - 10 minutes
 
 [bare_minimum](code_samples/01. bare_minimum)
 
@@ -13,7 +13,7 @@ Let the platform do the work...
     $ sls deploy
     $ sls invoke -f hello
 
-# Lambda Lifecycle - 5 minutes
+# Lambda Lifecycle - 10 minutes
 
 Lambda has an odd lifecycle, that usually involves complicated jargon like execution context etc etc.
 
