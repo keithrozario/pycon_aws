@@ -30,6 +30,14 @@ def start(num_items, num_procs):
     return response
 
 
+def start_compute(event, context):
+
+    items = ['password', 'password1', 'password2', 'password3']
+    response = multiproc_requests(items, 2, calc_items)
+
+    return response
+
+
 def gen_items(num_items):
 
     pk = datetime.now().isoformat()
@@ -57,6 +65,23 @@ def write_items(items, conn):
         response = dynamodb_client.put_item(TableName=table_name,
                                             Item=item)
         responses.append(response)
+
+    conn.send(responses)
+    conn.close()
+
+
+def calc_items(items, conn):
+
+    import hashlib, binascii,os
+
+    responses = []
+
+    for password in items:
+        salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+        pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'),
+                                      salt, 1000000)
+        pwdhash = binascii.hexlify(pwdhash)
+        responses.append((salt + pwdhash).decode('ascii'))
 
     conn.send(responses)
     conn.close()
@@ -103,9 +128,13 @@ def multiproc_requests(items, proc_count, func):
 
 
 if __name__ == '__main__':
+    #
+    # items = gen_items(100)
+    # results = multiproc_requests(items, 2, write_items)
 
-    items = gen_items(100)
-    results = multiproc_requests(items, 2, write_items)
+    items = ['password', 'password2', 'password3', 'password4']
+    results = multiproc_requests(items, 2, calc_items)
+    print(results)
 
 
 

@@ -4,10 +4,10 @@ plugins:
   - serverless-iam-roles-per-function
 
 provider:
- name: aws
- region: ap-southeast-1
- runtime: python3.7
- iamRoleStatements:
+  name: aws
+  region: ap-southeast-1
+  runtime: python3.7
+  iamRoleStatements:
    - Effect: Allow
      Action:
      - dynamodb:PutItem
@@ -26,40 +26,51 @@ provider:
 
 functions:
  
- multi_thread:
-  handler: multi_thread.main
-  description: Multithreaded Lambda Function
-  memorySize: 1792
-  timeout: 30
+  multi_thread:
+    handler: multi_thread.main
+    description: Multithreaded Lambda Function
+    memorySize: 1792
+    timeout: 30
 
- single_thread:
-  handler: single_thread.main
-  description: Single Threaded Function
-  memorySize: 1792
-  timeout: 30
+  single_thread:
+    handler: single_thread.main
+    description: Single Threaded Function
+    memorySize: 1792
+    timeout: 30
   
- batch_write:
-  handler: batch_write.main
-  description: using Batch writes instead
-  memorysize: 256
-  timeout: 30
-  iamRoleStatements:
-   - Effect: Allow
-     Action:
-     - dynamodb:PutItem
-     - dynamodb:BatchWriteItem
-     Resource: ${ssm:/pycon/dynamodb_layers_table_arn}
-   - Effect: Allow
-     Action:
-      - ssm:GetParameters
-      - ssm:GetParameter
-     Resource:
-      Fn::Join:
-       - ":"
-       - - arn:aws:ssm
-         - ${self:provider.region}
-         - Ref: AWS::AccountId
-         - parameter/pycon/dynamodb_table_name
+  batch_write:
+    handler: batch_write.main
+    description: using Batch writes instead
+    memorysize: 256
+    timeout: 30
+    iamRoleStatements:
+     - Effect: Allow
+       Action:
+       - dynamodb:PutItem
+       - dynamodb:BatchWriteItem
+       Resource: ${ssm:/pycon/dynamodb_layers_table_arn}
+     - Effect: Allow
+       Action:
+        - ssm:GetParameters
+        - ssm:GetParameter
+       Resource:
+        Fn::Join:
+         - ":"
+         - - arn:aws:ssm
+           - ${self:provider.region}
+           - Ref: AWS::AccountId
+           - parameter/pycon/dynamodb_table_name
+
+  multi_thread_compute:
+    handler: multi_thread.start_compute
+    description: Multithreaded start compute jobs
+    memorySize: 1792
+    timeout: 30
     
+  single_thread_compute:
+    handler: single_thread.start_compute
+    description: Singlethreaded start compute job
+    memorySize: 1792
+    timeout: 30
   
 

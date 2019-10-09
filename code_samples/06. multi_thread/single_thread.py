@@ -26,6 +26,14 @@ def start(num_items):
     return response
 
 
+def start_compute(event, context):
+
+    items = ['password', 'password1', 'password2', 'password3']
+    response = calc_items(items)
+
+    return response
+
+
 def gen_items(num_items):
 
     pk = datetime.now().isoformat()
@@ -57,6 +65,22 @@ def write_items(items):
     return responses
 
 
+def calc_items(items):
+
+    import hashlib, binascii,os
+
+    responses = []
+
+    for password in items:
+        salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+        pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'),
+                                      salt, 1000000
+        pwdhash = binascii.hexlify(pwdhash)
+        responses.append((salt + pwdhash).decode('ascii'))
+
+    return responses
+
+
 if __name__ == '__main__':
 
-    start(100)
+    start_compute({},{})
