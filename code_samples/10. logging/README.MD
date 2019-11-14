@@ -10,18 +10,18 @@ This is usually sufficient, but you would have to consider other solutions if yo
 
 To fully utilize the logging functionality in python, use the following code snippet:
 
-<code>
+```python
 	logger = logging.getLogger()
 	logger.setLevel(logging.INFO)
 	logger.info("This is a log message")
-</code>
+```
 
 
 # Advanced Logging
 
 According to this [post](https://www.denialof.services/lambda/), the root logger of an AWS Python lambda is configured as below:
 
-<code>
+```python
 	logging.Formatter.converter = time.gmtime
 	logger = logging.getLogger()
 	logger_handler = LambdaLoggerHandler()
@@ -32,7 +32,7 @@ According to this [post](https://www.denialof.services/lambda/), the root logger
 	logger_handler.addFilter(LambdaLoggerFilter())
 	logger.addHandler(logger_handler)
 
-</code>
+```
 
 If this is a format you're comfortable with, then you're in luck -- no action necessary. However, to modify the format of the logs require a slightly more cumbersome approach.
 
@@ -40,17 +40,19 @@ If this is a format you're comfortable with, then you're in luck -- no action ne
 
 In order to over-write the existing log format into something else (e.g JSON), you'll need to modify the log handler that already exist.
 
-<code>
+```python
 	logger = logging.getLogger()
 	logger.setLevel(logging.INFO)
 	logger.handlers[0].setFormatter(logging.Formatter('{"level": "%(levelname)s", "message": "%(message)s", "time": "%(asctime)s", "name": "%(name)s"}', 
 														"%Y-%m-%dT%H:%M:%S"))
 	logger.info("Hello")														
-</code>
+```
 
 THe example above would provide a log message as follows:
 
+```json
 {"level": "INFO", "message": "Hello", "time": "2019-11-14T11:28:00", "name": "root"}
+```
 
 # Why log with JSON
 
