@@ -1,0 +1,13 @@
+service: pycon-bare-minimum
+
+provider:
+ name: aws
+ region: ap-southeast-1
+ runtime: python3.7
+
+functions:
+  hello:
+    handler: log_test.main
+    memorySize: 256
+    timeout: 30
+    concurrency: 10
