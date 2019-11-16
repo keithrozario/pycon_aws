@@ -1,6 +1,7 @@
 import logging
 import json
 
+
 class FormatterJSON(logging.Formatter):
     def format(self, record):
         record.message = record.getMessage()
@@ -12,9 +13,10 @@ class FormatterJSON(logging.Formatter):
             'aws_request_id': getattr(record, 'aws_request_id', '00000000-0000-0000-0000-000000000000'),
             'message': record.message,
             'module': record.module,
-            'extra_data': record.__dict__.get('data', {}),
+            'data': record.__dict__.get('data', {}),
         }
         return json.dumps(j)
+
 
 def get_formatter():
     """

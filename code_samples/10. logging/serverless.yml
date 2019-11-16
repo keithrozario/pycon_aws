@@ -6,7 +6,7 @@ provider:
  runtime: python3.7
 
 functions:
-  hello:
+  log_test:
     handler: log_test.main
     memorySize: 256
     timeout: 30
