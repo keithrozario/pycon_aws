@@ -1,26 +1,52 @@
 # Introduction
 
-By default, serverless frameworks configures lambda functions to output logs to Cloudwatch, which is very useful.
+By default, serverless frameworks configures lambda functions to output logs to Cloudwatch Logs.
 
-Cloudwatch is the AWS default logging offering, and captures the logs from Lambda functions asynchrously. i.e. the Logs are written **after** the function has completed with some delay (seconds or minutes)
+Cloudwatch Logs is the AWS default logging service. It captures the logs from Lambda functions asynchrously i.e. the Logs are written **after** the function has completed with some delay (seconds or minutes), and stores them within the service itself.
 
-This is usually sufficient, but you would have to consider other solutions if you require to view logs in real-time for running lambda functions.
+Cloudwatch Logs is a fully serverless offering, and requires no configuration to setup. However, you do pay for log storage, and query (via Cloudwatch insights). In order to reduce you log cost, you can setup the `logRetentionInDays` parameter to delete logs once they get too old.
+
+Let's look at how we can configure our Logging within our Lambda Functions...
 
 # The Python Logging module
 
-To fully utilize the logging functionality in python, use the following code snippet:
+To setup logging within a Lambda function use the following code snippet:
 
 ```python
-
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-logger.info("This is a log message")
-
 ```
 
-# Advanced Logging
+after that, from within the function code, we can log out messages using python's built-in logging mechanism
 
-The standard log format is tab delimited and of the form:
+```python
+def main(event, context):
+	logger.info("This is an info message")
+	logger.warning("This is a warning message")
+	logger.debug("This is a debug message")
+	logger.error("This is an error message")
+```
+
+If you ran the code above, you would get the following logs in cloudwatch logs:
+
+10:48:56 START RequestId: 619e95a0-6ce5-41b6-80db-c5b8f54a3ff2 Version: $LATEST
+10:48:56 [INFO] 2019-11-16T10:48:56.890Z 619e95a0-6ce5-41b6-80db-c5b8f54a3ff2 This is an info message
+10:48:56 [WARNING] 2019-11-16T10:48:56.890Z 619e95a0-6ce5-41b6-80db-c5b8f54a3ff2 This is a warning message
+10:48:56 [ERROR] 2019-11-16T10:48:56.890Z 619e95a0-6ce5-41b6-80db-c5b8f54a3ff2 This is an error message
+10:48:56 END RequestId: 619e95a0-6ce5-41b6-80db-c5b8f54a3ff2 
+
+Question: Why didn't the debug message appear on the logs?
+
+Let's now look at making these logs more effective for reading...
+
+# Log Formats
+
+The standard log format is tab delimited text made up of the following four fields.
+
+* Level
+* Time(isoformat).milliseconds
+* AWS_REQUEST_ID
+* Log Message
 
 ```python
 logger_handler.setFormatter(logging.Formatter(
@@ -31,18 +57,20 @@ logger_handler.setFormatter(logging.Formatter(
 
 This [post](https://www.denialof.services/lambda/) goes into the details of the lambda function where the the root logger is configured as above. 
 
-But what if you wanted to change the log format? Logging as tab delimited fields is better than not logging, but most of your existing tooling might require JSON. Let's see if we can change it.
+But what if you wanted to change the log format? Logging as tab delimited fields is better than not logging, but most of your existing tooling might require JSON. Let's see if we can change out logs from tab-delimited to JSON.
 
 # Configuring Lambda Log Format
 
-In order to over-write the existing log format into something else (e.g JSON), you'll need to modify the log handler that already exist, or remove the existing log handler and add your own. The root handler is added during the bootstrap time of your function, you have no control over the setting of this handler.
+In order to over-write the existing log format into something else (e.g JSON), you'll need to modify the log handler that **already** exist, or remove the existing log handler and add your own. The root handler is added during the bootstrap time of your function, you have no control over the setting of this handler, you can only change it or delete it.
+
+To change the format of our logs, we'll change the existing handler using the code below:
 
 ```python
-	logger = logging.getLogger()
-	logger.setLevel(logging.INFO)
-	logger.handlers[0].setFormatter(logging.Formatter('{"level": "%(levelname)s", "message": "%(message)s", "time": "%(asctime)s", "name": "%(name)s"}', 
-														"%Y-%m-%dT%H:%M:%S"))
-	logger.info("Hello")														
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.handlers[0].setFormatter(logging.Formatter('{"level": "%(levelname)s", "message": "%(message)s", "time": "%(asctime)s", "name": "%(name)s"}', 
+													"%Y-%m-%dT%H:%M:%S"))
+logger.info("Hello")														
 ```
 
 The example above would provide a log message as follows:
@@ -53,7 +81,7 @@ The example above would provide a log message as follows:
 
 ```
 
-This allows you to change the log to JSON format, but ultimate the message is still plaintext. What if you wanted more structure in your logs. i.e. embed JSON objects into the log themselves.
+This allows you to change the log to JSON format, but ultimate the message element is still plaintext. What if you wanted more structure in your logs. i.e. embed JSON objects into the log themselves.
 
 # Configuring Lambda Log Format (next step)
 
@@ -127,29 +155,31 @@ The simple log_test function populates logs in JSON format into cloudwatch, and 
 
 	$ python3 query_logs.py
 
+```
 fields @timestamp, message, data.invoke_arn, data.value
 | sort @timestamp desc
 | filter data.invoke_arn like /arn:aws/ and data.value > '3' and message > '6'
 | limit 200
+```
 
-An programmatic example is demonstrated by the `log_test.py` file in this repository.
+A programmatic example is demonstrated by the `log_test.py` file in this repository.
 
 # Test your understanding
 
-	* Are cloudwatch logs recorded in real-time or with a delay?
-	* What is the standard format of Cloudwatch logs from Python lambda functions?
-	* How do we modify the format of the logs?
-	* What is the difference between Log Groups and Log Streams?
-	* Will the logs from two functions end up in the same Log Group?
-	* If we use the standard log format, can we still perform Cloudwatch insights Query on them?
-	* Could we query the output of multiple functions using cloudwatch insights? (answer is yes -- figure out how!)
+* Are cloudwatch logs recorded in real-time or with a delay?
+* What is the standard format of Cloudwatch logs from Python lambda functions?
+* How do we modify the format of the logs?
+* What is the difference between Log Groups and Log Streams?
+* Will the logs from two functions end up in the same Log Group?
+* If we use the standard log format, can we still perform Cloudwatch insights Query on them?
+* Could we query the output of multiple functions using cloudwatch insights? (answer is yes -- figure out how!)
 
 # Advanced questions
 
-	* Are there IAM permissions required to write out to Cloudwatch?
-	* Modify the query in the exercise to check for fields where data.value is greater than 5
-	* Modify query_logs.py to search for all logs from the last 2 minutes only (hint: it's not in the query itself)
-	* Modify query_logs.py to list out only error logs (those logged with logger.error)
+* Are there IAM permissions required to write out to Cloudwatch?
+* Modify the query in the exercise to check for fields where data.value is greater than 5
+* Modify query_logs.py to search for all logs from the last 2 minutes only (hint: it's not in the query itself)
+* Modify query_logs.py to list out only error logs (those logged with logger.error)
 
 # Conclusion
 

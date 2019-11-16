@@ -6,6 +6,14 @@ provider:
  runtime: python3.7
 
 functions:
+  
+  log_intro:
+    handler: log_intro.main
+    memorySize: 256
+    timeout: 30
+    concurrency: 10
+  
+  
   log_test:
     handler: log_test.main
     memorySize: 256
